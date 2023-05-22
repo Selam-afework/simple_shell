@@ -15,4 +15,7 @@ int _strcmp(char *s1, char *s2);
 char *get_command();
 int check_for_bin(char *cmd, char *av);
 void execute(char *argv[32], int a);
+void env(void);
+extern char **environ;
 #endif
+
