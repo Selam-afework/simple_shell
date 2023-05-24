@@ -19,11 +19,13 @@ char *get_command()
 	/* Checks for EOF character*/
 	if (nread == -1)
 	{
-		exit(0);
+		_printf("\nexit\n");
+		exit(-1);
 	}
 	if (_strcmp(line, "exit\n") == 0)
 	{
-		exit(0);
+		_printf("exit\n");
+		exit(-1);
 	}
 
 	/* remove '\n' character */
@@ -86,7 +88,7 @@ void execute(char *argv[32], int a)
 		if (((execve(argv[0], argv, NULL)) == -1))
 		{
 			perror("./hsh");
-			exit(EXIT_SUCCESS);
+			exit(EXIT_FAILURE);
 		}
 	}
 	else /* if av[0] doesn't start with "/bin/" */
@@ -95,7 +97,7 @@ void execute(char *argv[32], int a)
 		if (((execve(cmd, argv, NULL)) == -1))
 		{
 			perror("./hsh");
-			exit(EXIT_SUCCESS);
+			exit(EXIT_FAILURE);
 		}
 	}
 }
