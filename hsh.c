@@ -11,37 +11,29 @@ char *get_command()
 {
 	char *line = NULL;
 	int nread;
-	size_t n = 10;
+	size_t n = 0;
 
 	_printf("($) ");
 	nread = getline(&line, &n, stdin);
 
-	if (_strcmp(line, "\n") == 0)
+
+	/* Checks for EOF character*/
+	if (nread == -1)
 	{
+		_printf("\nexit\n");
 		free(line);
-		get_command();
+		exit(EXIT_SUCCESS);
 	}
-
-	else
+	if (_strcmp(line, "exit\n") == 0)
 	{
-		/* Checks for EOF character*/
-		if (nread == -1)
-		{
-			free(line);
-			exit(EXIT_SUCCESS);
-		}
-
-		/* exit function */
-		if (_strcmp(line, "exit\n") == 0)
-		{
-			free(line);
-			exit(EXIT_SUCCESS);
-		}
-
-		/* remove '\n' character */
-		if (line[nread - 1] == '\n')
-			line[nread - 1] = '\0';
+		_printf("exit\n");
+		free(line);
+		exit(EXIT_SUCCESS);
 	}
+
+	/* remove '\n' character */
+	if (line[nread - 1] == '\n')
+		line[nread - 1] = '\0';
 
 	return (line);
 }
@@ -53,8 +45,9 @@ char *get_command()
  * Return: 5 if its a match, anything else if not
  */
 
-int check_for_bin(char *cmd, char *av)
+int check_for_bin(char *av)
 {
+	char cmd[1024] = "/bin/";
 	int a = 0, j;
 
 	for (j = 0; j < 5; j++)
@@ -98,7 +91,6 @@ void execute(char *argv[32], int a)
 	{
 		if (((execve(argv[0], argv, NULL)) == -1))
 		{
-			free(*argv);
 			perror("./hsh");
 			exit(EXIT_SUCCESS);
 		}
@@ -108,7 +100,6 @@ void execute(char *argv[32], int a)
 		_strcat(cmd, argv[0]);
 		if (((execve(cmd, argv, NULL)) == -1))
 		{
-			free(*argv);
 			perror("./hsh");
 			exit(EXIT_SUCCESS);
 		}
@@ -126,12 +117,11 @@ int main(void)
 	while (1) /* Infinite loop */
 	{
 		char *line = NULL;
-		char *token, *delim = " \n\t\r";
+		char *token, *delim = " ";
 		int status;
-		char *av[32] = { NULL };
+		char *av[32] = {0};
 		pid_t pid;
 		int i = 0, a;
-		char cmd[1024] = "/bin/";
 
 		line = get_command();
 
@@ -145,10 +135,7 @@ int main(void)
 			i++;
 		}
 
-		if (*av == NULL)
-			continue;
-
-		a = check_for_bin(cmd, av[0]); /* checks if command includes "/bin/" */
+		a = check_for_bin(av[0]); /* checks if command includes "/bin/" */
 
 		pid = fork();
 		if (pid == -1)
@@ -166,5 +153,5 @@ int main(void)
 			free(*av);
 		}
 	}
-	return (EXIT_SUCCESS);
+	return (0);
 }
