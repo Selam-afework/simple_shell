@@ -17,10 +17,15 @@ char *get_command()
 	nread = getline(&line, &n, stdin);
 
 
+	if (_strcmp(line, "\n") == 0)
+	{
+		free(line);
+		get_command();
+	}
+
 	/* Checks for EOF character*/
 	if (nread == -1)
 	{
-		_printf("\nexit\n");
 		free(line);
 		exit(EXIT_SUCCESS);
 	}
@@ -40,7 +45,6 @@ char *get_command()
 
 /**
  * check_for_bin - checks if the command starts wiht /bin
- * @cmd: string "/bin/"
  * @av: the command
  * Return: 5 if its a match, anything else if not
  */
@@ -134,7 +138,8 @@ int main(void)
 			token = strtok(NULL, delim);
 			i++;
 		}
-
+		if (*av == NULL)
+			continue;
 		a = check_for_bin(av[0]); /* checks if command includes "/bin/" */
 
 		pid = fork();
@@ -150,8 +155,6 @@ int main(void)
 		else
 		{
 			wait(&status);
-			free(*av);
-		}
-	}
+			free(*av); }}
 	return (0);
 }
