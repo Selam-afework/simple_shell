@@ -98,7 +98,7 @@ void execute(char *argv[32], int a)
 	{
 		if (((execve(argv[0], argv, NULL)) == -1))
 		{
-			free(argv);
+			free(*argv);
 			perror("./hsh");
 			exit(EXIT_SUCCESS);
 		}
@@ -108,7 +108,7 @@ void execute(char *argv[32], int a)
 		_strcat(cmd, argv[0]);
 		if (((execve(cmd, argv, NULL)) == -1))
 		{
-			free(argv);
+			free(*argv);
 			perror("./hsh");
 			exit(EXIT_SUCCESS);
 		}
@@ -126,7 +126,7 @@ int main(void)
 	while (1) /* Infinite loop */
 	{
 		char *line = NULL;
-		char *token, *delim = " ";
+		char *token, *delim = " \n\t\r";
 		int status;
 		char *av[32] = { NULL };
 		pid_t pid;
@@ -144,6 +144,9 @@ int main(void)
 			token = strtok(NULL, delim);
 			i++;
 		}
+
+		if (*av == NULL)
+			continue;
 
 		a = check_for_bin(cmd, av[0]); /* checks if command includes "/bin/" */
 
