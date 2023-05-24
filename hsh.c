@@ -31,7 +31,6 @@ char *get_command()
 	}
 	if (_strcmp(line, "exit\n") == 0)
 	{
-		_printf("exit\n");
 		free(line);
 		exit(EXIT_SUCCESS);
 	}
