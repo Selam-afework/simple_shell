@@ -20,13 +20,11 @@ char *get_command()
 	if (nread == -1)
 	{
 		free(line);
-		_printf("\nexit\n");
 		exit(EXIT_SUCCESS);
 	}
 	if (_strcmp(line, "exit\n") == 0)
 	{
 		free(line);
-		_printf("exit\n");
 		exit(EXIT_SUCCESS);
 	}
 
