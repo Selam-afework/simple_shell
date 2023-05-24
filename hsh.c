@@ -11,7 +11,7 @@ char *get_command()
 {
 	char *line = NULL;
 	int nread;
-	size_t n = 0;
+	size_t n = 10;
 
 	_printf("($) ");
 	nread = getline(&line, &n, stdin);
@@ -19,13 +19,15 @@ char *get_command()
 	/* Checks for EOF character*/
 	if (nread == -1)
 	{
+		free(line);
 		_printf("\nexit\n");
-		exit(-1);
+		exit(EXIT_SUCCESS);
 	}
 	if (_strcmp(line, "exit\n") == 0)
 	{
+		free(line);
 		_printf("exit\n");
-		exit(-1);
+		exit(EXIT_SUCCESS);
 	}
 
 	/* remove '\n' character */
@@ -87,6 +89,7 @@ void execute(char *argv[32], int a)
 	{
 		if (((execve(argv[0], argv, NULL)) == -1))
 		{
+			free(argv);
 			perror("./hsh");
 			exit(EXIT_FAILURE);
 		}
@@ -96,6 +99,7 @@ void execute(char *argv[32], int a)
 		_strcat(cmd, argv[0]);
 		if (((execve(cmd, argv, NULL)) == -1))
 		{
+			free(argv);
 			perror("./hsh");
 			exit(EXIT_FAILURE);
 		}
@@ -145,7 +149,10 @@ int main(void)
 			execute(av, a);
 
 		else
+		{
 			wait(&status);
+			free(*av);
+		}
 	}
 	return (0);
 }
