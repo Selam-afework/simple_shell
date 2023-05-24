@@ -19,8 +19,7 @@ char *get_command()
 	/* Checks for EOF character*/
 	if (nread == -1)
 	{
-		_printf("\nexit\n");
-		exit(-1);
+		exit(0);
 	}
 	if (_strcmp(line, "exit\n") == 0)
 	{
