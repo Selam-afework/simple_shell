@@ -151,7 +151,7 @@ int main(void)
 		if (pid == -1)
 		{
 			perror("fork: ");
-			return (1);
+			return (EXIT_FAILURE);
 		}
 
 		if (pid == 0) /* run execve in a child process */
@@ -163,5 +163,5 @@ int main(void)
 			free(*av);
 		}
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
