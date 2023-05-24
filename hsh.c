@@ -100,7 +100,7 @@ void execute(char *argv[32], int a)
 		{
 			free(argv);
 			perror("./hsh");
-			exit(EXIT_FAILURE);
+			exit(EXIT_SUCCESS);
 		}
 	}
 	else /* if av[0] doesn't start with "/bin/" */
@@ -110,7 +110,7 @@ void execute(char *argv[32], int a)
 		{
 			free(argv);
 			perror("./hsh");
-			exit(EXIT_FAILURE);
+			exit(EXIT_SUCCESS);
 		}
 	}
 }
@@ -151,7 +151,7 @@ int main(void)
 		if (pid == -1)
 		{
 			perror("fork: ");
-			return (EXIT_FAILURE);
+			return (EXIT_SUCCESS);
 		}
 
 		if (pid == 0) /* run execve in a child process */
