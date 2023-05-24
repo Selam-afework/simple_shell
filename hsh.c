@@ -16,21 +16,32 @@ char *get_command()
 	_printf("($) ");
 	nread = getline(&line, &n, stdin);
 
-	/* Checks for EOF character*/
-	if (nread == -1)
+	if (_strcmp(line, "\n") == 0)
 	{
 		free(line);
-		exit(EXIT_SUCCESS);
-	}
-	if (_strcmp(line, "exit\n") == 0)
-	{
-		free(line);
-		exit(EXIT_SUCCESS);
+		get_command();
 	}
 
-	/* remove '\n' character */
-	if (line[nread - 1] == '\n')
-		line[nread - 1] = '\0';
+	else
+	{
+		/* Checks for EOF character*/
+		if (nread == -1)
+		{
+			free(line);
+			exit(EXIT_SUCCESS);
+		}
+
+		/* exit function */
+		if (_strcmp(line, "exit\n") == 0)
+		{
+			free(line);
+			exit(EXIT_SUCCESS);
+		}
+
+		/* remove '\n' character */
+		if (line[nread - 1] == '\n')
+			line[nread - 1] = '\0';
+	}
 
 	return (line);
 }
