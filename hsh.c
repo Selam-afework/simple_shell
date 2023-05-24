@@ -26,6 +26,7 @@ char *get_command()
 	/* Checks for EOF character*/
 	if (nread == -1)
 	{
+		_printf("\n");
 		free(line);
 		exit(EXIT_SUCCESS);
 	}
@@ -90,11 +91,11 @@ void execute(char *argv[32], int a)
 	if (_strcmp(argv[0], "env") == 0)
 		env();
 
-	if (a == 5) /*if av[0] starts with "/bin/" */
+	if (a == 5) /*if argv[0] starts with "/bin/" */
 	{
 		if (((execve(argv[0], argv, NULL)) == -1))
 		{
-			perror("./hsh");
+			_printf("./hsh: %s: command not found\n", argv[0]);
 			exit(EXIT_SUCCESS);
 		}
 	}
@@ -103,7 +104,7 @@ void execute(char *argv[32], int a)
 		_strcat(cmd, argv[0]);
 		if (((execve(cmd, argv, NULL)) == -1))
 		{
-			perror("./hsh");
+			_printf("./hsh: %s: command not found\n", argv[0]);
 			exit(EXIT_SUCCESS);
 		}
 	}
