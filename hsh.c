@@ -89,6 +89,9 @@ void execute(char *argv[32], int a)
 {
 	char cmd[1024] = "/bin/";
 
+	if (_strcmp(argv[0], "env") == 0)
+		env();
+
 	if (a == 5) /* if argv[0] starts with "/bin/" */
 	{
 		if (((execve(argv[0], argv, environ)) == -1))		
