@@ -50,7 +50,6 @@ char *get_command()
  * Return: 5 if its a match, anything else if not
  */
 
-/*
 int check_for_bin(char *av)
 {
 	char cmd[1024] = "/bin/";
@@ -63,7 +62,7 @@ int check_for_bin(char *av)
 	}
 
 	return (a);
-} */
+}
 
 /**
  * env - prints the current environment
@@ -88,18 +87,18 @@ void env(void)
 
 void execute(char *argv[32], int a)
 {
-	(void) a;
-	/*char cmd[1024] = "/bin/";*/
+	char cmd[1024] = "/bin/";
 
-	/* if (a == 5) if argv[0] starts with "/bin/" */
-	
-	if (((execve(argv[0], argv, environ)) == -1))		
+	if (a == 5) /* if argv[0] starts with "/bin/" */
 	{
-		_printf("./hsh: %s: command not found\n", argv[0]);
-		exit(EXIT_SUCCESS);
+		if (((execve(argv[0], argv, environ)) == -1))		
+		{
+			_printf("./hsh: %s: command not found\n", argv[0]);
+			exit(EXIT_SUCCESS);
+		}
 	}
 
-	/* else  if av[0] doesn't start with "/bin/" 
+	else /* if av[0] doesn't start with "/bin/" */
 	{
 		_strcat(cmd, argv[0]);
 		if (((execve(cmd, argv, environ)) == -1))
@@ -107,7 +106,7 @@ void execute(char *argv[32], int a)
 			_printf("./hsh: %s: command not found\n", argv[0]);
 			exit(EXIT_SUCCESS);
 		}
-	} */
+	}
 }
 
 /**
@@ -144,7 +143,7 @@ int main(void)
 			continue;
 		}
 		else {
-			/* a = check_for_bin(av[0]); checks if command includes "/bin/" */
+			a = check_for_bin(av[0]); /* checks if command includes "/bin/" */
 
 			pid = fork();
 			if (pid == -1)
