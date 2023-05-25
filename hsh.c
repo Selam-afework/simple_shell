@@ -18,18 +18,19 @@ char *get_command()
 	
 	nread = getline(&line, &n, stdin);
 
-	if (_strcmp(line, "\n") == 0)
-	{
-		free(line);
-		get_command();
-	}
-
 	/* Checks for EOF character*/
 	if (nread == -1)
 	{
 		free(line);
 		exit(EXIT_SUCCESS);
 	}
+
+	if (_strcmp(line, "\n") == 0)
+	{
+		free(line);
+		get_command();
+	}
+
 	if (_strcmp(line, "exit\n") == 0)
 	{
 		free(line);
@@ -90,9 +91,6 @@ void execute(char *argv[32], int a)
 	(void) a;
 	/*char cmd[1024] = "/bin/";*/
 
-	if (_strcmp(argv[0], "env") == 0)
-		env();
-
 	/* if (a == 5) if argv[0] starts with "/bin/" */
 	
 	if (((execve(argv[0], argv, environ)) == -1))		
@@ -122,8 +120,8 @@ int main(void)
 {
 	while (1) /* Infinite loop */
 	{
-		char *line = NULL;
-		char *token, *delim = " ";
+		char *line = {0};
+		char *token, *delim = " \n\t\r";
 		int status;
 		char *av[32] = {0};
 		pid_t pid;
@@ -141,22 +139,27 @@ int main(void)
 			i++;
 		}
 		if (*av == NULL)
+		{
+			free(line);
 			continue;
-		/* a = check_for_bin(av[0]); checks if command includes "/bin/" */
-
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("fork: ");
-			return (EXIT_SUCCESS);
 		}
+		else {
+			/* a = check_for_bin(av[0]); checks if command includes "/bin/" */
 
-		if (pid == 0) /* run execve in a child process */
-			execute(av, a);
+			pid = fork();
+			if (pid == -1)
+			{
+				perror("fork: ");
+				return (EXIT_SUCCESS);
+			}
 
-		else
-		{
-			wait(&status);
-			free(*av); }}
+			if (pid == 0) /* run execve in a child process */
+				execute(av, a);
+
+			else {
+				wait(&status);
+				*av = NULL;
+				line = NULL;
+			}}}
 	return (0);
 }
