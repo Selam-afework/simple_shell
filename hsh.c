@@ -15,9 +15,8 @@ char *get_command()
 
 	if (isatty(STDIN_FILENO) == 1)
 		_printf("($) ");
-
+	
 	nread = getline(&line, &n, stdin);
-
 
 	if (_strcmp(line, "\n") == 0)
 	{
@@ -94,7 +93,7 @@ void execute(char *argv[32], int a)
 
 	if (a == 5) /*if argv[0] starts with "/bin/" */
 	{
-		if (((execve(argv[0], argv, NULL)) == -1))
+		if (((execve(argv[0], argv, environ)) == -1))
 		{
 			_printf("./hsh: %s: command not found\n", argv[0]);
 			exit(EXIT_SUCCESS);
@@ -103,7 +102,7 @@ void execute(char *argv[32], int a)
 	else /* if av[0] doesn't start with "/bin/" */
 	{
 		_strcat(cmd, argv[0]);
-		if (((execve(cmd, argv, NULL)) == -1))
+		if (((execve(cmd, argv, environ)) == -1))
 		{
 			_printf("./hsh: %s: command not found\n", argv[0]);
 			exit(EXIT_SUCCESS);
@@ -122,7 +121,7 @@ int main(void)
 	while (1) /* Infinite loop */
 	{
 		char *line = NULL;
-		char *token, *delim = " /n/t/r";
+		char *token, *delim = " ";
 		int status;
 		char *av[32] = {0};
 		pid_t pid;
