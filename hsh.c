@@ -11,9 +11,11 @@ char *get_command()
 {
 	char *line = NULL;
 	int nread;
-	size_t n = 0;
+	size_t n = 10;
 
-	_printf("($) ");
+	if (isatty(STDIN_FILENO) == 1)
+		_printf("($) ");
+
 	nread = getline(&line, &n, stdin);
 
 
@@ -26,7 +28,6 @@ char *get_command()
 	/* Checks for EOF character*/
 	if (nread == -1)
 	{
-		_printf("\n");
 		free(line);
 		exit(EXIT_SUCCESS);
 	}
@@ -121,11 +122,11 @@ int main(void)
 	while (1) /* Infinite loop */
 	{
 		char *line = NULL;
-		char *token, *delim = " ";
+		char *token, *delim = " /n/t/r";
 		int status;
 		char *av[32] = {0};
 		pid_t pid;
-		int i = 0, a;
+		int i = 0, a = 0;
 
 		line = get_command();
 
