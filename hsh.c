@@ -15,7 +15,7 @@ char *get_command()
 
 	if (isatty(STDIN_FILENO) == 1)
 		_printf("($) ");
-	
+
 	nread = getline(&line, &n, stdin);
 
 	/* Checks for EOF character*/
@@ -25,12 +25,14 @@ char *get_command()
 		exit(EXIT_SUCCESS);
 	}
 
+	/* Empty enter */
 	if (_strcmp(line, "\n") == 0)
 	{
 		free(line);
 		get_command();
 	}
 
+	/* Basic exit */
 	if (_strcmp(line, "exit\n") == 0)
 	{
 		free(line);
@@ -94,7 +96,7 @@ void execute(char *argv[32], int a)
 
 	if (a == 5) /* if argv[0] starts with "/bin/" */
 	{
-		if (((execve(argv[0], argv, environ)) == -1))		
+		if (((execve(argv[0], argv, environ)) == -1))
 		{
 			_printf("./hsh: %s: command not found\n", argv[0]);
 			exit(EXIT_SUCCESS);
@@ -130,7 +132,6 @@ int main(void)
 		int i = 0, a = 0;
 
 		line = get_command();
-
 		token = strtok(line, delim);
 
 		/* assignes the tokenized string to argv for execve to use */
@@ -138,30 +139,26 @@ int main(void)
 		{
 			av[i] = token;
 			token = strtok(NULL, delim);
-			i++;
-		}
+			i++;		}
 		if (*av == NULL)
 		{
 			free(line);
-			continue;
-		}
-		else {
+			continue;	}
+		else
+		{
 			a = check_for_bin(av[0]); /* checks if command includes "/bin/" */
 
 			pid = fork();
 			if (pid == -1)
 			{
 				perror("fork: ");
-				return (EXIT_SUCCESS);
-			}
+				return (EXIT_SUCCESS);	}
 
 			if (pid == 0) /* run execve in a child process */
 				execute(av, a);
-
-			else {
+			else
+			{
 				wait(&status);
 				*av = NULL;
-				line = NULL;
-			}}}
-	return (0);
-}
+				line = NULL;	}}}
+	return (0);	}
